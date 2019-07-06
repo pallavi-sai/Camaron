@@ -1,58 +1,141 @@
+
+
+  //import 'dart:io';
+import 'package:camaron/about_us.dart';
+import 'package:camaron/dashboard.dart';
+import 'package:camaron/login.dart';
+//import 'package:camaron/sign_up.dart';
 import 'package:flutter/material.dart';
-void main() => runApp(new MaterialApp(
-  title: 'Forms in Flutter',
-  home: new HomePage(),
-));
-
-class HomePage extends StatelessWidget {
-  static String tag = 'home-page';
-
+import 'package:url_launcher/url_launcher.dart';
+//import 'package:camaron/Contact.dart';
+class AppBarBack extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final logo = Hero(
-      tag: 'home',
-      child: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: CircleAvatar(
-          radius: 72.0,
-          backgroundColor: Colors.transparent,
-          backgroundImage: AssetImage('assets/image.png'),
-        ),
-      ),
-    );
+    debugPrint(MediaQuery
+        .of(context)
+        .size
+        .height
+        .toString());
+    final title = 'Basic List';
+    return MaterialApp(
+        title: title,
+        home: Scaffold(
+            appBar: AppBar(
+                automaticallyImplyLeading: true,
+                backgroundColor: Colors.green,
+                leading: IconButton(icon: Icon(Icons.arrow_back),
+                    //alignment: Alignment(0,0.3),
+                    color: Colors.white,
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute<Null>(
+                          builder: (BuildContext context) {
+                            return new Dashboard();
+                          }
+                      )
 
-    final welcome = Padding(
-      padding: EdgeInsets.all(8.0),
-      child: Text(
-        'Robic Rufarm',
-        style: TextStyle(fontSize: 28.0, color: Colors.white),
-      ),
-    );
+                      );
+                    }
+                )
+            ),
+            body: ListView(
+                children: <Widget>[
+                  ListTile(
+                    leading: Icon(Icons.trending_up),
+                    title: Text('Ph trend'),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.keyboard_arrow_right),
+                    title: Text('Dissolved O2 Trend'),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.cloud),
+                    title: Text('Temperature Trend'),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.devices),
+                    title: Text('About Device'),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.home),
+                    title: Text('About Us'),
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute<Null>(builder: (BuildContext context){
+                        return new HomePage();
+                      }));
+                      },
+                  ),
+                  ListTile(
+                      leading: Icon(Icons.contact_phone),
+                      title: Text('Contact Us'),
 
-    final lorem = Padding(
-      padding: EdgeInsets.all(8.0),
-      child: Text(
-        ' Robic Rufarm is a team of six members, each with knowledge in various fields of science and agriculture , infrastructured with practical skill and dedicated research with a sharp aim to up raise the quality of life of a farmer.Initially started with two people with a desire to make a difference, now we’re a team of four with the same desire multiplied with a great deal of team spirit , and a zeal to make the dream of seeing farmers happy and stress free, come true.',
-        style: TextStyle(fontSize: 16.0, color: Colors.white),
-      ),
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute<Null>(
+                            builder: (BuildContext context) {
+                              return new ContactUs();
+                            }));
+                      }
+                  ),
+                  ListTile(
+                      leading: Icon(Icons.power_settings_new),
+                      title: Text('Logout'),
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute<Null>(
+                            builder: (BuildContext context) {
+                              return new LoginScreen();
+                            })
+                        );
+                      }
+                  )
+                ]
+            )
+        )
     );
-
-    final body = Container(
-      width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.all(28.0),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [
-          Colors.green,
-          Colors.lightBlueAccent,
-        ]),
-      ),
-      child: Column(
-        children: <Widget>[logo, welcome, lorem],
-      ),
-    );
-
+  }
+}
+class ContactUs extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      body: body,
+        appBar: AppBar(
+          backgroundColor: Colors.green,
+          title: Text('Contact Information'),
+        ),
+        body: ListView(
+            children: <Widget>[
+              ListTile(
+                title: Text('Contact Us',
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                  textScaleFactor: 1.5,
+                ),
+              ),
+              ListTile(
+                title: Text(
+                  'MAIL : myrufarm@gmail.com',
+                  style: TextStyle(color: Colors.black),
+                  textScaleFactor: 1.5,
+                ),
+              ),
+              ListTile(
+                title: Text(
+                  'PHONE NO : 08328684533',
+                  style: TextStyle(color: Colors.black),
+                  textScaleFactor: 1.5,
+                ),
+              ),
+              ListTile(
+                title: Text(
+                  'WEBSITE : https://robicrufarm.com',
+                  style: TextStyle(color: Colors.blue),
+                  textScaleFactor: 1.5,
+                ),
+                onTap: (){
+                  launch('https://robicrufarm.com');
+                },
+              )
+            ]
+        )
     );
   }
 }
