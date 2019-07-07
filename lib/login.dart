@@ -6,9 +6,8 @@ import 'adddevices.dart';
 import 'reset_pass.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'state_widget.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
-//
 void main() => runApp(new MaterialApp(
   title: 'login',
   home: new LoginScreen(),
@@ -35,12 +34,10 @@ class _LoginScreenState extends State<LoginScreen> {
  Future<FirebaseUser> _loginwithFacebook() async {
    var facebookLogin = new FacebookLogin();
    var result = await facebookLogin.logInWithReadPermissions(['email']);
-
    debugPrint(result.status.toString());
-
-
    if(result.status== FacebookLoginStatus.loggedIn){
      FirebaseUser user = await _auth.signInWithFacebook(accessToken: result.accessToken.token);
+     print("User Name : ${user.displayName}");
      return user;
    }
     return null;
@@ -54,6 +51,19 @@ class _LoginScreenState extends State<LoginScreen> {
      }
    });
   }
+ final GoogleSignIn googleSignIn = new GoogleSignIn();
+ Future<FirebaseUser> _signIn() async {
+   GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+   GoogleSignInAuthentication gSA = await googleSignInAccount.authentication;
+
+   FirebaseUser user = await _auth.signInWithGoogle(
+       idToken: gSA.idToken, accessToken: gSA.accessToken);
+
+   print("User Name : ${user.displayName}");
+   return user;
+ }
+
+
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   _LoginData _data = new _LoginData();
 
@@ -113,6 +123,8 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: new AppBar(
         backgroundColor: Colors.green,
         title: new Text('ROBIC RUFARM'),
+         leading: IconButton(icon: Icon(Icons.smartphone),onPressed: ()=> null,
+         )
       ),
       body: new Container(
           //width: ScreenUtil.getInstance().setWidth(200),
@@ -253,7 +265,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: <Widget>[
                     new Container(
                       child: new FlatButton(
-                          onPressed:  () => StateWidget.of(context).signInWithGoogle(),
+                          onPressed:  ()
+                          { _signIn();
+                          Navigator.of(context).push(MaterialPageRoute<Null>(builder: (BuildContext context){
+                            return new Adddevices();
+                          }));
+
+
+                          },
+
+
 
                           child: new Row(
                             mainAxisSize: MainAxisSize.min,
@@ -269,7 +290,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     new Container(
                       child: new FlatButton(
-                          onPressed: ()=>_logIn(),
+                          onPressed: ()
+                          { _logIn();
+                          Navigator.of(context).push(MaterialPageRoute<Null>(builder: (BuildContext context){
+                          return new Adddevices();
+                          }));
+                          },
+
                           child: new Row(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
@@ -283,7 +310,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     ),
 
+
                   ],
+
                 ),
 
               ],
