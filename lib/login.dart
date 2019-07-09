@@ -37,12 +37,17 @@ class _LoginScreenState extends State<LoginScreen> {
    debugPrint(result.status.toString());
    if(result.status== FacebookLoginStatus.loggedIn){
      FirebaseUser user = await _auth.signInWithFacebook(accessToken: result.accessToken.token);
+
      print("User Name : ${user.displayName}");
      return user;
    }
     return null;
  }
-
+ void onLoginStatusChanged(bool isLoggedIn) {
+   setState(() {
+     this.isLogged = isLoggedIn;
+   });
+ }
 
   void _logIn(){
    _loginwithFacebook().then((response){
@@ -51,7 +56,10 @@ class _LoginScreenState extends State<LoginScreen> {
      }
    });
   }
- final GoogleSignIn googleSignIn = new GoogleSignIn();
+
+
+
+  final GoogleSignIn googleSignIn = new GoogleSignIn();
  Future<FirebaseUser> _signIn() async {
    GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
    GoogleSignInAuthentication gSA = await googleSignInAccount.authentication;
@@ -123,7 +131,8 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: new AppBar(
         backgroundColor: Colors.green,
         title: new Text('ROBIC RUFARM'),
-         leading: IconButton(icon: Icon(Icons.smartphone),onPressed: ()=> null,
+         leading: IconButton(icon: new Image.asset('android/image/logo.png'),
+             onPressed: null,
          )
       ),
       body: new Container(
